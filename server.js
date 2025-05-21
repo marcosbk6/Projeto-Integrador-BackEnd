@@ -3,6 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs'); // Adicione o bcrypt no topo do arquivo
 const cors = require('cors');
+const rotasPerfume = require('./routes/perfume');
+const rotasHidratante = require('./routes/hidratante');
+const rotasMaquiagem = require('./routes/maquiagem');
 
 // 2. Importando o modelo User
 const User = require('./models/User');
@@ -113,6 +116,11 @@ app.get('/usuarios', async (req, res) => {
     res.status(500).json({ message: 'Erro ao listar usuários.' });
   }
 });
+
+
+app.use('/produtos/perfumes', rotasPerfume);
+app.use('/produtos/hidratantes', rotasHidratante);
+app.use('/produtos/maquiagem', rotasMaquiagem);
 
 
 // 9. Iniciar o servidor

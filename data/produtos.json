@@ -1,0 +1,77 @@
+{
+  "perfumes": [
+    {
+      "id": 1,
+      "nome": "Essencial Oud Feminino",
+      "genero": "Feminino",
+      "preco": 120.00,
+      "imagem": "images/Essencial-Oud-Feminino.png"
+    },
+    {
+      "id": 2,
+      "nome": "Una-Infinito",
+      "genero": "Feminino",
+      "preco": 130.00,
+      "imagem": "images/Una-Infinito.png"
+    },
+    {
+      "id": 3,
+      "nome": "Ilía Laços Feminino",
+      "genero": "Feminino",
+      "preco": 140.00,
+      "imagem": "images/Ilía-Laços-Feminino.png"
+    },
+    {
+      "id": 4,
+      "nome": "Ilía",
+      "genero": "Feminino",
+      "preco": 140.00,
+      "imagem": "images/Ilía.png"
+    },
+    {
+      "id": 5,
+      "nome": "Una Artisan",
+      "genero": "Feminino",
+      "preco": 140.00,
+      "imagem": "images/Una-Artisan.png"
+    },
+    {
+      "id": 6,
+      "nome": "Essencial Exclusivo Feminino",
+      "genero": "Feminino",
+      "preco": 140.00,
+      "imagem": "images/Essencial-Exclusivo-Feminino.png"
+    },
+    {
+      "id": 7,
+      "nome": "Essencial Feminino",
+      "genero": "Feminino",
+      "preco": 140.00,
+      "imagem": "images/Essencial-Feminino.png"
+    },
+    {
+      "id": 8,
+      "nome": "Una Blush",
+      "genero": "Feminino",
+      "preco": 140.00,
+      "imagem": "images/Una-Blush.png"
+    }
+    
+  ],
+  "hidratantes": [
+    {
+      "id": 3,
+      "nome": "Creme para Corpo Tododia Framboesa e Pimenta Rosa",
+      "preco": 59.91,
+      "imagem": "images/Hidratante1.png"
+    }
+  ],
+  "maquiagem": [
+    {
+      "id": 4,
+      "nome": "Batom Vermelho Clássico",
+      "preco": 35.50,
+      "imagem": "images/maquiagem1.png"
+    }
+  ]
+}
