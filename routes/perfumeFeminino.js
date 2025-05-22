@@ -3,7 +3,8 @@ const router = express.Router();
 const produtos = require('../data/produtos.json');
 
 router.get('/', (req, res) => {
-  res.json(produtos.perfumes);  // pega só o array perfumes
+  const femininos = produtos.perfumes.filter(p => p.genero === "Feminino");
+  res.json(femininos);
 });
 
 module.exports = router;

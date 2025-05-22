@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs'); // Adicione o bcrypt no topo do arquivo
 const cors = require('cors');
-const rotasPerfume = require('./routes/perfume');
+const perfumeFeminino = require('./routes/perfumeFeminino');
+const perfumeMasculino = require('./routes/perfumeMasculino');
 const rotasHidratante = require('./routes/hidratante');
 const rotasMaquiagem = require('./routes/maquiagem');
 
@@ -118,7 +119,8 @@ app.get('/usuarios', async (req, res) => {
 });
 
 
-app.use('/produtos/perfumes', rotasPerfume);
+app.use('/produtos/perfumes-femininos', perfumeFeminino);
+app.use('/produtos/perfumes-masculinos', perfumeMasculino);
 app.use('/produtos/hidratantes', rotasHidratante);
 app.use('/produtos/maquiagem', rotasMaquiagem);
 

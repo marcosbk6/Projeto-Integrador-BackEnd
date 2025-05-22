@@ -55,6 +55,62 @@
       "genero": "Feminino",
       "preco": 140.00,
       "imagem": "images/Una-Blush.png"
+    },
+    {
+      "id": 9,
+      "nome": "Essencial Masculino 100ml",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Essencial-Masculino-100ml.png"
+    },
+    {
+      "id": 10,
+      "nome": "Essencial Exclusivo Masculino",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Essencial-Exclusivo-Masculino.png"
+    },
+    {
+      "id": 11,
+      "nome": "Kaiak Aero Masculino",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Kaiak-Aero-Masculino.png"
+    },
+    {
+      "id": 12,
+      "nome": "Natura Homem Neo Deo Parfum",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Neo-Deo-Parfum.png"
+    },
+    {
+      "id": 13,
+      "nome": "Paz e Humor Masculino",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Paz-e-Humor-Masculino.png"
+    },
+    {
+      "id": 14,
+      "nome": "Essencial Supreme Masculino",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Essencial-Supreme-Masculino.png"
+    },
+    {
+      "id": 15,
+      "nome": "Química de Humor Masculino",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Química-de-Humor-Masculino.png"
+    },
+    {
+      "id": 16,
+      "nome": "Kaiak Masculino",
+      "genero": "Masculino",
+      "preco": 140.00,
+      "imagem": "images/Kaiak-Masculino.png"
     }
     
   ],
