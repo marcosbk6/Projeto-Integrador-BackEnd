@@ -19,7 +19,8 @@
       "nome": "Ilía Laços Feminino",
       "genero": "Feminino",
       "preco": 140.00,
-      "imagem": "../assets/imagens/Perfumes/Feminino/Ilía-Laços-Feminino.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Ilía-Laços-Feminino.png",
+      "imagemDestaque": "./imagens/destaq-Ilía.png"
     },
     {
       "id": 4,
@@ -74,7 +75,8 @@
       "nome": "Kaiak Aero Masculino",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "../assets/imagens/Perfumes/Masculino/Kaiak-Aero-Masculino.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Kaiak-Aero-Masculino.png",
+      "imagemDestaque": "./imagens/destaq-Kaiak.png"
     },
     {
       "id": 12,
