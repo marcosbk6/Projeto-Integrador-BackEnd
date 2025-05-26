@@ -7,12 +7,15 @@ const perfumeFeminino = require('./routes/perfumeFeminino');
 const perfumeMasculino = require('./routes/perfumeMasculino');
 const rotasHidratante = require('./routes/hidratante');
 const rotasMaquiagem = require('./routes/maquiagem');
+const path = require('path');
+const fs = require('fs');
 
 // 2. Importando o modelo User
 const User = require('./models/User');
 
 // 3. Inicializando o app Express
 const app = express();
+app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
 // 4. Definindo a porta onde o servidor vai rodar
 const PORT = 3000;
@@ -123,6 +126,25 @@ app.use('/produtos/perfumes-femininos', perfumeFeminino);
 app.use('/produtos/perfumes-masculinos', perfumeMasculino);
 app.use('/produtos/hidratantes', rotasHidratante);
 app.use('/produtos/maquiagem', rotasMaquiagem);
+
+app.get('/produtos', (req, res) => {
+  const filePath = path.join(__dirname, 'data', 'produtos.json');
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Erro ao ler produtos.json:', err);
+      return res.status(500).json({ message: 'Erro ao carregar os produtos.' });
+    }
+
+    try {
+      const produtos = JSON.parse(data);
+      res.json(produtos);
+    } catch (parseError) {
+      console.error('Erro ao converter JSON:', parseError);
+      res.status(500).json({ message: 'Erro ao processar os produtos.' });
+    }
+  });
+});
 
 
 // 9. Iniciar o servidor

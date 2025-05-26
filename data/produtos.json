@@ -5,129 +5,212 @@
       "nome": "Essencial Oud Feminino",
       "genero": "Feminino",
       "preco": 120.00,
-      "imagem": "images/Essencial-Oud-Feminino.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Essencial-Oud-Feminino.png"
     },
     {
       "id": 2,
-      "nome": "Una-Infinito",
+      "nome": "Una Senses Deo Parfum 5ml",
       "genero": "Feminino",
       "preco": 130.00,
-      "imagem": "images/Una-Infinito.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Una-Senses-Deo-Parfum-5ml.png"
     },
     {
       "id": 3,
       "nome": "Ilía Laços Feminino",
       "genero": "Feminino",
       "preco": 140.00,
-      "imagem": "images/Ilía-Laços-Feminino.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Ilía-Laços-Feminino.png"
     },
     {
       "id": 4,
       "nome": "Ilía",
       "genero": "Feminino",
       "preco": 140.00,
-      "imagem": "images/Ilía.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Ilía.png"
     },
     {
       "id": 5,
       "nome": "Una Artisan",
       "genero": "Feminino",
       "preco": 140.00,
-      "imagem": "images/Una-Artisan.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Una-Artisan.png"
     },
     {
       "id": 6,
       "nome": "Essencial Exclusivo Feminino",
       "genero": "Feminino",
       "preco": 140.00,
-      "imagem": "images/Essencial-Exclusivo-Feminino.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Essencial-Exclusivo-Feminino.png"
     },
     {
       "id": 7,
       "nome": "Essencial Feminino",
       "genero": "Feminino",
       "preco": 140.00,
-      "imagem": "images/Essencial-Feminino.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Essencial-Feminino.png"
     },
     {
       "id": 8,
       "nome": "Una Blush",
       "genero": "Feminino",
       "preco": 140.00,
-      "imagem": "images/Una-Blush.png"
+      "imagem": "../assets/imagens/Perfumes/Feminino/Una-Blush.png"
     },
     {
       "id": 9,
       "nome": "Essencial Masculino 100ml",
-      "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Essencial-Masculino-100ml.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Essencial-Masculino-100ml.png"
     },
     {
       "id": 10,
       "nome": "Essencial Exclusivo Masculino",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Essencial-Exclusivo-Masculino.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Essencial-Exclusivo-Masculino.png"
     },
     {
       "id": 11,
       "nome": "Kaiak Aero Masculino",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Kaiak-Aero-Masculino.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Kaiak-Aero-Masculino.png"
     },
     {
       "id": 12,
       "nome": "Natura Homem Neo Deo Parfum",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Neo-Deo-Parfum.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Neo-Deo-Parfum.png"
     },
     {
       "id": 13,
       "nome": "Paz e Humor Masculino",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Paz-e-Humor-Masculino.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Paz-e-Humor-Masculino.png"
     },
     {
       "id": 14,
       "nome": "Essencial Supreme Masculino",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Essencial-Supreme-Masculino.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Essencial-Supreme-Masculino.png"
     },
     {
       "id": 15,
       "nome": "Química de Humor Masculino",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Química-de-Humor-Masculino.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Química-de-Humor-Masculino.png"
     },
     {
       "id": 16,
       "nome": "Kaiak Masculino",
       "genero": "Masculino",
       "preco": 140.00,
-      "imagem": "images/Kaiak-Masculino.png"
+      "imagem": "../assets/imagens/Perfumes/Masculino/Kaiak-Masculino.png"
     }
     
   ],
   "hidratantes": [
     {
-      "id": 3,
+      "id": 1,
       "nome": "Creme para Corpo Tododia Framboesa e Pimenta Rosa",
+      "preco": 59.90,
+      "imagem": "../assets/imagens/Hidratante/Creme-para-Corpo-Tododia-Framboesa-e-Pimenta-Rosa.png"
+    },
+    {
+      "id": 2,
+      "nome": "Creme para o Corpo Tododia Amora Vermelha e Amora Vermelha e Jabuticaba",
       "preco": 59.91,
-      "imagem": "images/Hidratante1.png"
+      "imagem": "../assets/imagens/Hidratante/Creme-para-o-Corpo-Tododia-Amora-Vermelha-e-Amora-Vermelha-e-Jabuticaba.png"
+    },
+    {
+      "id": 3,
+      "nome": "Creme Para o Corpo Tododia Algodão",
+      "preco": 59.91,
+      "imagem": "../assets/imagens/Hidratante/Creme-Para-o-Corpo-Tododia-Algodão.png"
+    },
+    {
+      "id": 4,
+      "nome": "Creme Noturno Para o Corpo Tododia Todanoite",
+      "preco": 59.91,
+      "imagem": "../assets/imagens/Hidratante/Creme-Noturno-Para-o-Corpo-Tododia-Todanoite.png"
+    },
+    {
+      "id": 5,
+      "nome": "Creme para o Corpo Tododia Tâmara e Canela",
+      "preco": 59.91,
+      "imagem": "../assets/imagens/Hidratante/Creme-para-o-Corpo-Tododia-Tâmara-e-Canela.png"
+    },
+    {
+      "id": 6,
+      "nome": "Creme Para o Corpo Tododia Capim Limão e Hortelã",
+      "preco": 59.91,
+      "imagem": "../assets/imagens/Hidratante/Creme-para-o-Corpo-Tododia-Capim-Limão-e-Hortelã.png"
+    },
+    {
+      "id": 7,
+      "nome": "Creme para as Mãos Tododia Tâmara e Canela",
+      "preco": 59.91,
+      "imagem": "../assets/imagens/Hidratante/Creme-para-as-Mãos-Tododia-Tâmara-e-Canela.png"
+    },
+    {
+      "id": 8,
+      "nome": "Hidratante Para as Mãos Ekos Maracujá",
+      "preco": 59.91,
+      "imagem": "../assets/imagens/Hidratante/Hidratante-Para-as-Mãos-Ekos-Maracujá.png"
     }
   ],
   "maquiagem": [
     {
-      "id": 4,
-      "nome": "Batom Vermelho Clássico",
+      "id": 1,
+      "nome": "Batom Vermelho Clássico Broken Brown",
       "preco": 35.50,
-      "imagem": "images/maquiagem1.png"
+      "imagem": "../assets/imagens/Maquiagem/Batom-Multimix-Cremoso-Faces-Broken-Brown.png"
+    },
+    {
+      "id": 2,
+      "nome": "Batom Vermelho Clássico Vermelho Hot",
+      "preco": 35.50,
+      "imagem": "../assets/imagens/Maquiagem/Batom-Vermelho-Clássico-Vermelho-Hot.png"
+    },
+    {
+      "id": 3,
+      "nome": "Gloss labial FPS 15 Una",
+      "preco": 35.50,
+      "imagem": "../assets/imagens/Maquiagem/Gloss-labial-FPS-15-Una.png"
+    },
+    {
+      "id": 4,
+      "nome": "Batom Matte Intransferível Una",
+      "preco": 35.50,
+      "imagem": "../assets/imagens/Maquiagem/Batom-Matte-Intransferível-Una.png"
+    },
+    {
+      "id": 5,
+      "nome": "Máscara para Cílios Volume Magnífico Lavável Una",
+      "preco": 35.50,
+      "imagem": "../assets/imagens/Maquiagem/Máscara-para-Cílios-Volume-Magnífico-Lavável-Una.png"
+    },
+    {
+      "id": 6,
+      "nome": "Delineador Matte Peel Off Una",
+      "preco": 35.50,
+      "imagem": "../assets/imagens/Maquiagem/Delineador-Matte-Peel-Off-Una.png"
+    },
+    {
+      "id": 7,
+      "nome": "Base Fluida HD Una",
+      "preco": 35.50,
+      "imagem": "../assets/imagens/Maquiagem/Base-Fluida-HD-Una.png"
+    },
+    {
+      "id": 8,
+      "nome": "Blush Color Faces",
+      "preco": 35.50,
+      "imagem": "../assets/imagens/Maquiagem/Blush-Color-Faces.png"
     }
   ]
 }
