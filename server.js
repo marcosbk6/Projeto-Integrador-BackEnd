@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 // 7. Conectar ao MongoDB
-mongoose.connect('mongodb+srv://marcosdev:Samara2591*@cluster0.dzjytvp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect('mongodb+srv://marcosdev:Samara2591*@cluster0.dzjytvp.mongodb.net/meuEcommerce?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('Conectado ao MongoDB Atlas!'))
   .catch((error) => console.error('Erro ao conectar ao MongoDB:', error));
 
@@ -145,6 +145,29 @@ app.get('/produtos', (req, res) => {
     }
   });
 });
+
+  let carrinho = [];
+
+app.get('/carrinho', (req, res) => {
+  res.json(carrinho);
+});
+
+app.post('/carrinho', (req, res) => {
+  carrinho.push(req.body);
+  res.status(201).json({ mensagem: 'Produto adicionado' });
+});
+
+app.delete('/carrinho/:index', (req, res) => {
+  const index = parseInt(req.params.index);
+  if (!isNaN(index) && index >= 0 && index < carrinho.length) {
+    carrinho.splice(index, 1);
+    res.json({ mensagem: 'Item removido com sucesso' });
+  } else {
+    res.status(400).json({ erro: 'Índice inválido' });
+  }
+});
+
+
 
 
 // 9. Iniciar o servidor
