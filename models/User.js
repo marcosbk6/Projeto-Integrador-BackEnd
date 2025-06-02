@@ -12,7 +12,13 @@ const userSchema = new mongoose.Schema({
   senha: {
     type: String,
     required: true
-  }
+  },
+  pedidos: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Pedido'
+  }]
+}, {
+  timestamps: true
 });
 
 // 2. Criar o modelo baseado no schema
