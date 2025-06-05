@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 
 // Configurar o Mercado Pago com seu token de acesso de teste
 const client = new MercadoPagoConfig({ 
-    accessToken: 'TEST-5210804407702579-060314-1e026408947242bec1bd61ed23fd549e-789737070'
+    accessToken: 'APP_USR-5888662978593263-060515-d0238a8030ab4aee466e24fb09969928-2473504965'
 });
 
 // Criar preferência de pagamento
@@ -39,22 +39,16 @@ router.post('/create-preference', auth, async (req, res) => {
         const result = await preference.create({
             body: {
                 items,
-                back_urls: {
-                    success: "http://localhost:5500/sucesso.html",
-                    failure: "http://localhost:5500/falha.html",
-                    pending: "http://localhost:5500/pendente.html"
-                },
-                notification_url: "http://localhost:3000/pagamentos/webhook",
-                external_reference: req.userId,
                 statement_descriptor: "MINHA LOJA",
                 payment_methods: {
-                    installments: 1,
-                    default_payment_method_id: null,
-                    default_installments: null
+                    installments: 1
                 },
+                binary_mode: true,
+                expires: false,
                 payer: {
-                    name: "Cliente Teste",
-                    email: "test_user_123456@testuser.com", // Email de um usuário de teste
+                    name: "Test",
+                    surname: "User",
+                    email: "test_user_1531609086@testuser.com",
                     identification: {
                         type: "CPF",
                         number: "12345678909"
@@ -76,7 +70,8 @@ router.post('/create-preference', auth, async (req, res) => {
         // Retornar a URL do sandbox para ambiente de teste
         res.json({
             id: result.id,
-            init_point: result.sandbox_init_point || result.init_point
+            init_point: result.init_point,
+            sandbox_init_point: result.sandbox_init_point
         });
     } catch (error) {
         console.error('Erro ao criar preferência:', error);
