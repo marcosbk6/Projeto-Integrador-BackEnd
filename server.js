@@ -7,10 +7,12 @@ const perfumeFeminino = require('./routes/perfumeFeminino');
 const perfumeMasculino = require('./routes/perfumeMasculino');
 const rotasHidratante = require('./routes/hidratante');
 const rotasMaquiagem = require('./routes/maquiagem');
+const pedidosRoutes = require('./routes/pedidos');
 const path = require('path');
 const fs = require('fs');
 require('dotenv').config(); // isso carrega as variáveis do .env
 const jwt = require('jsonwebtoken');
+const pagamentosRouter = require('./routes/pagamentos');
 
 // 2. Conectando ao MongoDB
 mongoose.connect('mongodb+srv://marcosdev:Samara2591*@cluster0.dzjytvp.mongodb.net/meuEcommerce?retryWrites=true&w=majority&appName=Cluster0')
@@ -49,9 +51,10 @@ const app = express();
 
 // Configuração do CORS
 app.use(cors({
-  origin: '*',
+  origin: ['http://127.0.0.1:5500', 'http://localhost:5500'],
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version']
 }));
 
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
@@ -68,6 +71,9 @@ app.use((req, res, next) => {
 
 // 7. Middleware para entender JSON no corpo da requisição
 app.use(express.json());
+
+// Middleware para o webhook do Mercado Pago (deve vir antes das rotas)
+app.use('/pagamentos/webhook', express.raw({type: 'application/json'}));
 
 // 8. Middleware de autenticação
 const authMiddleware = (req, res, next) => {
@@ -86,6 +92,19 @@ const authMiddleware = (req, res, next) => {
   } catch (error) {
     console.error('Erro ao verificar token:', error);
     res.status(401).json({ message: 'Token inválido' });
+  }
+};
+
+// Middleware para verificar se o usuário é admin
+const isAdminMiddleware = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ message: 'Acesso negado. Apenas administradores podem acessar esta rota.' });
+    }
+    next();
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao verificar permissões de administrador' });
   }
 };
 
@@ -206,14 +225,25 @@ app.post('/cadastro', async (req, res) => {
       return res.status(400).json({ message: 'Username já está em uso.' });
     }
 
+    // Verificar se é o primeiro usuário
+    const totalUsuarios = await User.countDocuments();
+    const isAdmin = totalUsuarios === 0; // Se for o primeiro usuário, será admin
+
     // Criptografar a senha
     const senhaCriptografada = await bcrypt.hash(senha, 10);
 
     // Criar o novo usuário
-    const novoUsuario = new User({ username, senha: senhaCriptografada });
+    const novoUsuario = new User({ 
+      username, 
+      senha: senhaCriptografada,
+      isAdmin // Define como admin se for o primeiro usuário
+    });
     await novoUsuario.save();
 
-    res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
+    res.status(201).json({ 
+      message: isAdmin ? 'Administrador cadastrado com sucesso!' : 'Usuário cadastrado com sucesso!',
+      isAdmin 
+    });
   } catch (error) {
     console.error('Erro ao cadastrar usuário:', error);
     res.status(500).json({ message: 'Erro ao cadastrar usuário.' });
@@ -251,7 +281,8 @@ app.post('/login', async (req, res) => {
       message: 'Login bem-sucedido!',
       usuario: {
         _id: usuario._id,
-        username: usuario.username
+        username: usuario.username,
+        isAdmin: usuario.isAdmin
       },
       token
     });
@@ -269,6 +300,74 @@ app.get('/usuarios', async (req, res) => {
   } catch (error) {
     console.error('Erro ao listar usuários:', error);
     res.status(500).json({ message: 'Erro ao listar usuários.' });
+  }
+});
+
+// Rotas administrativas
+app.get('/admin/usuarios', authMiddleware, isAdminMiddleware, async (req, res) => {
+  try {
+    const usuarios = await User.find({}, '-senha');
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar usuários' });
+  }
+});
+
+app.get('/admin/pedidos', authMiddleware, isAdminMiddleware, async (req, res) => {
+  try {
+    const pedidos = await Pedido.find().populate('usuario', 'username');
+    res.json(pedidos);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar pedidos' });
+  }
+});
+
+app.put('/admin/pedidos/:id', authMiddleware, isAdminMiddleware, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const pedido = await Pedido.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    ).populate('usuario', 'username');
+    
+    if (!pedido) {
+      return res.status(404).json({ message: 'Pedido não encontrado' });
+    }
+    
+    res.json(pedido);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao atualizar status do pedido' });
+  }
+});
+
+// Rota para criar um usuário administrador (apenas acessível por outros admins)
+app.post('/admin/criar-admin', authMiddleware, isAdminMiddleware, async (req, res) => {
+  try {
+    const { username, senha } = req.body;
+
+    if (!username || !senha) {
+      return res.status(400).json({ message: 'Preencha username e senha.' });
+    }
+
+    const usuarioExistente = await User.findOne({ username });
+    if (usuarioExistente) {
+      return res.status(400).json({ message: 'Username já está em uso.' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const senhaCriptografada = await bcrypt.hash(senha, salt);
+
+    const novoAdmin = new User({
+      username,
+      senha: senhaCriptografada,
+      isAdmin: true
+    });
+
+    await novoAdmin.save();
+    res.status(201).json({ message: 'Administrador criado com sucesso' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao criar administrador' });
   }
 });
 
@@ -334,6 +433,12 @@ app.get('/meus-pedidos', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Erro ao buscar pedidos' });
   }
 });
+
+// Adicionando as rotas de pedidos
+app.use('/', pedidosRoutes);
+
+// Rotas de pagamento (deve vir depois dos middlewares)
+app.use('/pagamentos', pagamentosRouter);
 
 // 12. Iniciar o servidor
 app.listen(PORT, () => {
