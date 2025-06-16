@@ -4,7 +4,7 @@ const pedidoSchema = new mongoose.Schema({
   // ID é gerado automaticamente pelo MongoDB (_id)
 
   // Referência ao usuário que fez o pedido
-  usuario: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
@@ -47,7 +47,7 @@ const pedidoSchema = new mongoose.Schema({
   // Status do pedido
   status: {
     type: String,
-    enum: ['pendente', 'em_andamento', 'concluido'],
+    enum: ['pendente', 'aprovado', 'cancelado'],
     default: 'pendente'
   },
 
@@ -66,6 +66,12 @@ const pedidoSchema = new mongoose.Schema({
     cidade: String,
     estado: String,
     cep: String
+  },
+
+  // ID do pagamento associado ao pedido
+  pagamentoId: {
+    type: String,
+    required: true
   }
 }, {
   timestamps: true // Cria automaticamente createdAt e updatedAt
