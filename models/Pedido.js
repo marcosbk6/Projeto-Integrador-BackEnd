@@ -20,12 +20,22 @@ const pedidoSchema = new mongoose.Schema({
   itens: [{
     // Referência ao produto
     produto: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Produto',
+      required: true
+    },
+    // Informações do produto no momento do pedido
+    produtoInfo: {
       nome: String,
       preco: Number,
       imagem: String,
       categoria: String
     },
-    quantidade: Number
+    quantidade: {
+      type: Number,
+      required: true,
+      min: 1
+    }
   }],
 
   // Valor total do pedido

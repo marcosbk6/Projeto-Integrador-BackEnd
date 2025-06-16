@@ -20,9 +20,9 @@ router.post('/create-preference', auth, async (req, res) => {
             throw new Error('Itens inválidos');
         }
 
+
         // Gerar um ID único para o pedido
         const externalReference = `PEDIDO_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
         const preference = new Preference(client);
         const result = await preference.create({
             body: {
@@ -75,6 +75,7 @@ router.post('/create-preference', auth, async (req, res) => {
 // Webhook para receber notificações do Mercado Pago
 router.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
     try {
+
         const payment = req.body;
         console.log('Webhook recebido:', payment);
 
@@ -138,6 +139,7 @@ router.post('/webhook', express.raw({type: 'application/json'}), async (req, res
         res.status(500).send('Error');
     }
 });
+
 
 // Rota para listar pedidos (apenas para admin)
 router.get('/pedidos', auth, async (req, res) => {
