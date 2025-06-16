@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 const auth = require('../middleware/auth');
+const Pedido = require('../models/Pedido');
+const User = require('../models/User');
 
 // Configurar o Mercado Pago com seu token de acesso de teste
 const client = new MercadoPagoConfig({ 
@@ -11,70 +13,61 @@ const client = new MercadoPagoConfig({
 // Criar preferência de pagamento
 router.post('/create-preference', auth, async (req, res) => {
     try {
-        console.log('Recebendo requisição para criar preferência...');
-        const { itens, total, endereco } = req.body;
-        console.log('Dados recebidos:', { itens, total, endereco });
+        console.log('Dados recebidos:', req.body);
+        const { itens } = req.body;
 
         if (!itens || !Array.isArray(itens) || itens.length === 0) {
             throw new Error('Itens inválidos');
         }
 
-        // Criar os itens no formato do Mercado Pago
-        const items = itens.map(item => {
-            if (!item.produto || !item.produto.nome || !item.produto.preco || !item.quantidade) {
-                throw new Error('Item inválido: ' + JSON.stringify(item));
-            }
-            return {
-                title: item.produto.nome,
-                unit_price: Number(item.produto.preco),
-                quantity: Number(item.quantidade),
-                currency_id: 'BRL',
-                description: `${item.produto.nome} - Quantidade: ${item.quantidade}`
-            };
-        });
-
-        console.log('Items formatados:', items);
+        // Gerar um ID único para o pedido
+        const externalReference = `PEDIDO_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         const preference = new Preference(client);
         const result = await preference.create({
             body: {
-                items,
-                statement_descriptor: "MINHA LOJA",
-                payment_methods: {
-                    installments: 1
+                items: itens.map(item => ({
+                    id: String(item.produto._id || '1'),
+                    title: item.produto.nome,
+                    quantity: parseInt(item.quantidade),
+                    unit_price: parseFloat(item.produto.preco),
+                    currency_id: "BRL",
+                    picture_url: item.produto.imagem || ""
+                })),
+                back_urls: {
+                    success: "https://cacb-2804-4564-1a-51a-6a60-171f-cf86-5e2f.ngrok-free.app/sucesso.html",
+                    failure: "https://cacb-2804-4564-1a-51a-6a60-171f-cf86-5e2f.ngrok-free.app/falha.html",
+                    pending: "https://cacb-2804-4564-1a-51a-6a60-171f-cf86-5e2f.ngrok-free.app/pendente.html"
                 },
-                binary_mode: true,
-                expires: false,
-                payer: {
-                    name: "Test",
-                    surname: "User",
-                    email: "test_user_1531609086@testuser.com",
-                    identification: {
-                        type: "CPF",
-                        number: "12345678909"
-                    },
-                    address: {
-                        street_name: endereco.rua || '',
-                        street_number: endereco.numero || '',
-                        zip_code: (endereco.cep || '').replace(/\D/g, ''),
-                        neighborhood: endereco.bairro || '',
-                        city: endereco.cidade || 'São Paulo',
-                        federal_unit: endereco.estado || 'SP'
-                    }
-                }
+                notification_url: "https://cacb-2804-4564-1a-51a-6a60-171f-cf86-5e2f.ngrok-free.app/pagamentos/webhook",
+                payment_methods: {
+                    installments: 12,
+                    default_installments: 1
+                },
+                statement_descriptor: "MINHA LOJA",
+                external_reference: externalReference
             }
         });
 
-        console.log('Resposta do Mercado Pago:', result);
-        
-        // Retornar a URL do sandbox para ambiente de teste
+        // Salvar pedido como pendente
+        const novoPedido = new Pedido({
+            userId: req.userId,
+            numeroPedido: externalReference,
+            itens: itens,
+            total: itens.reduce((total, item) => total + (parseFloat(item.produto.preco) * parseInt(item.quantidade)), 0),
+            status: 'pendente',
+            pagamentoId: result.id
+        });
+
+        await novoPedido.save();
+        console.log('Pedido pendente salvo:', novoPedido);
+
         res.json({
             id: result.id,
-            init_point: result.init_point,
-            sandbox_init_point: result.sandbox_init_point
+            init_point: result.init_point
         });
     } catch (error) {
-        console.error('Erro ao criar preferência:', error);
+        console.error('Erro detalhado ao criar preferência:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -82,19 +75,83 @@ router.post('/create-preference', auth, async (req, res) => {
 // Webhook para receber notificações do Mercado Pago
 router.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
     try {
-        console.log('Webhook recebido:', req.body);
-        const { type, data } = req.body;
-        
-        if (type === 'payment') {
-            const paymentId = data.id;
-            // TODO: Implementar busca de pagamento com nova versão do SDK
-            console.log('Pagamento recebido:', paymentId);
+        const payment = req.body;
+        console.log('Webhook recebido:', payment);
+
+        // Verificar se é uma notificação de pagamento
+        if (payment.type === 'payment') {
+            const paymentId = payment.data.id;
+            
+            // Buscar informações detalhadas do pagamento
+            const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+                headers: {
+                    'Authorization': `Bearer ${client.accessToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao buscar informações do pagamento');
+            }
+
+            const paymentInfo = await response.json();
+            console.log('Informações do pagamento:', paymentInfo);
+
+            // Atualizar o pedido com base no status do pagamento
+            const pedido = await Pedido.findOne({ 
+                numeroPedido: paymentInfo.external_reference 
+            });
+
+            if (pedido) {
+                // Mapear status do Mercado Pago para nosso sistema
+                const statusMap = {
+                    'approved': 'aprovado',
+                    'pending': 'pendente',
+                    'in_process': 'pendente',
+                    'rejected': 'cancelado',
+                    'cancelled': 'cancelado',
+                    'refunded': 'cancelado',
+                    'charged_back': 'cancelado'
+                };
+
+                const novoStatus = statusMap[paymentInfo.status] || 'pendente';
+                
+                // Só atualiza se o status mudou
+                if (pedido.status !== novoStatus) {
+                    pedido.status = novoStatus;
+                    await pedido.save();
+                    console.log('Pedido atualizado:', pedido);
+
+                    // Se o pagamento foi aprovado, podemos enviar um email de confirmação aqui
+                    if (novoStatus === 'aprovado') {
+                        // TODO: Implementar envio de email
+                        console.log('Pagamento aprovado! Pedido:', pedido.numeroPedido);
+                    }
+                }
+            } else {
+                console.error('Pedido não encontrado para o external_reference:', paymentInfo.external_reference);
+            }
         }
 
         res.status(200).send('OK');
     } catch (error) {
         console.error('Erro no webhook:', error);
         res.status(500).send('Error');
+    }
+});
+
+// Rota para listar pedidos (apenas para admin)
+router.get('/pedidos', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user || !user.isAdmin) {
+            return res.status(403).json({ message: 'Acesso negado' });
+        }
+
+        const pedidos = await Pedido.find().sort({ createdAt: -1 });
+        res.json(pedidos);
+    } catch (error) {
+        console.error('Erro ao listar pedidos:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 
